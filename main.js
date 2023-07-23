@@ -59,9 +59,28 @@ function addStar() {
 }
 
 Array(200).fill().forEach(addStar);
-
+//Baground texture
 const spaceTexture = new THREE.TextureLoader().load("space-1.webp");
 scene.background = spaceTexture;
+scene.add(spaceTexture);
+// avatar
+const didiTexture = new THREE.TextureLoader().load("didi.jpeg");
+const didi = new THREE.Mesh(
+  new THREE.BoxGeometry(3, 3, 3),
+  new THREE.MeshBasicMaterial({ map: didiTexture })
+);
+scene.add(didi);
+
+//moon
+const moonTexture = new THREE.TextureLoader().load("moon.jpeg");
+const normalTexture = new THREE.TextureLoader().load("normal.jpg");
+const moon = new THREE.Mesh(
+  new THREE.SphereGeometry(3, 32, 32),
+  new THREE.MeshStandardMaterial({ map: moonTexture, normalMap: normalTexture })
+);
+moon.position.z = 30;
+moon.position.setX(-10);
+scene.add(moon);
 
 function animate() {
   requestAnimationFrame(animate);
@@ -72,3 +91,18 @@ function animate() {
   controls.update();
 }
 animate();
+
+function moveCamera() {
+  const t = document.body.getBoundingClientRect().top;
+  moon.rotation.x += 0.05;
+  moon.rotation.y += 0.075;
+  moon.rotation.z += 0.05;
+
+  didi.rotation.x += 0.01;
+  didi.rotation.y += 0.01;
+
+  camara.position.z = t * -0.01;
+  camara.position.x = t * -0.0002;
+  camara.position.y = t * -0.0002;
+}
+document.body.onscroll = moveCamera;
